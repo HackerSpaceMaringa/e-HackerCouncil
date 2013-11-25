@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Adicione uma petição ao HackerCouncil</h1>
+    <form action="/add" method="post">
+        <input type="text" name="title"/><br>
+        <textarea name="text"></textarea><br>
+        <input type="submit" value="criar">
+    </form>
+  </body>
+</html>
