@@ -5,7 +5,7 @@
 
 var express = require('express');
 var routes = require('./routes');
-var create = require('./routes/create')
+var poll = require('./routes/poll')
 var http = require('http');
 var path = require('path');
 
@@ -32,8 +32,8 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/create', create.create);
-app.post('/add', create.add);
+app.get('/poll/create', poll.create);
+app.post('/poll/add', poll.add);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
