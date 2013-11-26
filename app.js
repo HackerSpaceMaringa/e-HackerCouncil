@@ -8,6 +8,8 @@ var routes = require('./routes');
 var poll = require('./routes/poll')
 var http = require('http');
 var path = require('path');
+var mongoose = require('mongoose');
+var pollDB = require('./public/javascript/pollDAO');
 
 var app = express();
 
@@ -26,6 +28,23 @@ app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Start database connection
+var db = mongoose.connection;
+
+db.on('error', console.error);
+db.once('open', function() {
+    console.log('Conectado ao MongoDB.')
+});
+
+mongoose.connect('mongodb://localhost/test'); // <--- Database name here
+pollDAO = new pollDB.pollDAO(mongoose);
+pollDAO.insert({
+  id: 1,
+  title: "Teste",
+  description: "Teste",
+  date: 2
+  });
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
@@ -34,7 +53,6 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/poll/create', poll.create);
 app.post('/poll/add', poll.add);
-
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
