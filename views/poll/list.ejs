@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HackerSpace</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+      <h1>HackerCouncil - Lista</h1>
+      <% for(var i=0; i<polls.length; i++) { %>
+        <li>
+        <p> <%= polls[i].title %> </p>
+        </li>
+      <% } %>
+  </body>
+</html>

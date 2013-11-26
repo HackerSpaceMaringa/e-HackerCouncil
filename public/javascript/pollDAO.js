@@ -4,10 +4,16 @@
 
 exports.pollDAO = function(mongoose) {
   var pollSchema = new mongoose.Schema({
-    id: Number,
-    title: { type: String },
+    title: String,
+    author: String,
+    comments: [{ body: String, date: Date }],
     description: String,
-    date: Number,
+    date: { type: Date, default: Date.now },
+    votes: {
+          aprove: Number,
+          reprove: Number,
+          neutral: Number
+    }
   });
 
   var poll = mongoose.model('poll', pollSchema);
@@ -22,13 +28,18 @@ exports.pollDAO = function(mongoose) {
   }
 
   // Remove a poll with the same ID; 
-  this.remove = function(id) {
-    //TODO
+  this.remove = function(a) {
+    poll.remove(a, function(error, result) {
+      if (err) return console.error(err);
+      console.dir(result);
+    });
   }
 
   // List the last n polls createds.
   // n = number of polls to list. */
-  this.list = function(n) {
-    //TODO
+  this.list = function(n,callback) {
+    poll.find({}).sort({date: -1}).limit(n).exec(function(err,polls){
+      callback(polls);
+    });
   }
 }
