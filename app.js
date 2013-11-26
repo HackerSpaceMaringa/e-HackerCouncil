@@ -46,9 +46,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/poll/create', poll.create);
 app.post('/poll/add', poll.add);
-app.get('/poll/list', poll.list);
+app.get('/poll/remove/:id', poll.remove);
+app.get('/polls', poll.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

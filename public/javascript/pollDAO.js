@@ -29,8 +29,9 @@ exports.pollDAO = function(mongoose) {
 
   // Remove a poll with the same ID; 
   this.remove = function(a) {
-    poll.remove(a, function(error, result) {
+    poll.remove(a, function(err, result) {
       if (err) return console.error(err);
+      console.dir(a);
       console.dir(result);
     });
   }
