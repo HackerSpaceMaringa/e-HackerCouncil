@@ -20,6 +20,14 @@
         <p>  <%= polls[i].description %></p>
         <%= polls[i].date %><br>
         <a href='/poll/remove/<%= polls[i].id %>'>Remover</a>
+        <h2>Comentários:</h2>
+        <% for(var j=0; j<polls[i].comments.length; j++){ %>
+          <p> <%= polls[i].comments[j].body %></p> 
+        <% } %>
+        <form action='/poll/comment/<%= polls[i].id %>/' method="get">
+          <textarea name="commentBody"></textarea><br>                            
+          <input type="submit" value="comentar">                                     
+        </form>  
         </li>
       <% } %>
   </body>
