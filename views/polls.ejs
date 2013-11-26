@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HackerSpace</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+
+     <h1>Adicione uma petição ao HackerCouncil</h1>
+     <form action="/poll/add" method="post">
+        <input type="text" name="title"/><br>
+        <textarea name="description"></textarea><br>
+        <input type="submit" value="criar">
+     </form>
+
+      <h1>HackerCouncil - Lista</h1>
+      <% for(var i=0; i<polls.length; i++) { %>
+        <li>
+        <h2> <%= polls[i].title %> </h2>
+        <p>  <%= polls[i].description %></p>
+        <%= polls[i].date %><br>
+        <a href='/poll/remove/<%= polls[i].id %>'>Remover</a>
+        </li>
+      <% } %>
+  </body>
+</html>
