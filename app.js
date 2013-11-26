@@ -20,6 +20,7 @@ app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
+app.use(express.bodyParser());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
@@ -38,12 +39,6 @@ db.once('open', function() {
 
 mongoose.connect('mongodb://localhost/test'); // <--- Database name here
 pollDAO = new pollDB.pollDAO(mongoose);
-pollDAO.insert({
-  id: 1,
-  title: "Teste",
-  description: "Teste",
-  date: 2
-  });
 
 // development only
 if ('development' == app.get('env')) {
@@ -53,6 +48,8 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/poll/create', poll.create);
 app.post('/poll/add', poll.add);
+app.get('/poll/list', poll.list);
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
