@@ -47,6 +47,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.post('/poll/add', poll.add);
+app.get('/poll/comment/:id/', poll.comment);
 app.get('/poll/remove/:id', poll.remove);
 app.get('/polls', poll.list);
 
