@@ -36,6 +36,18 @@ exports.pollDAO = function(mongoose) {
     });
   }
 
+  // Push a comment in the poll that fits with a.
+  this.comment = function(a,comment) {
+    var conditions = a, 
+    update = { $push: {comments:comment}},
+    options = { upsert: true };
+    poll.update(conditions, update, options, function(err, num) {
+      if (err) return console.error(err);
+      console.dir(a);
+      console.dir(comment);
+    });
+  }
+
   // List the last n polls createds.
   // n = number of polls to list. */
   this.list = function(n,callback) {
