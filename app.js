@@ -11,6 +11,7 @@ var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
 var pollDB = require('./public/javascript/pollDAO');
+var userDB = require('./public/javascript/userDAO');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google').Strategy;
 
@@ -65,13 +66,17 @@ db.once('open', function() {
 });
 
 mongoose.connect('mongodb://localhost/test'); // <--- Database name here
+
+// Init DAOs
 pollDAO = new pollDB.pollDAO(mongoose);
+userDAO = new userDB.userDAO(mongoose);
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+// Polls
 app.get('/', routes.index);
 app.post('/poll/add', ensureAuthenticated, poll.add);
 app.get('/poll/comment/:id/', ensureAuthenticated, poll.comment);
