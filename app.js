@@ -1,7 +1,14 @@
 
-/**
- * Module dependencies.
- */
+/* 
+ * Copyright (c) 2013 HackerSpace Maringá
+ * This software is under The MIT License.
+ * 
+ * Developers:
+ *  João Almeida de Jesus Jr.   <joao29a@gmail.com>
+ *  Marcos Yukio Siraichi       <sir.yukio@gmail.com>
+ *  Vanderson M. do Rosario     <vandersonmr2@gmail.com>
+ *
+*/
 
 var express = require('express');
 var routes = require('./routes');
