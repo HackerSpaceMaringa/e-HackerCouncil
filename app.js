@@ -11,6 +11,9 @@
 */
 
 var express = require('express');
+passport = require('passport');
+GitHubStrategy = require('passport-github').Strategy;
+$ = require('jquery');
 var routes = require('./routes');
 var poll = require('./routes/poll');
 var login = require('./routes/login');
@@ -19,47 +22,9 @@ var path = require('path');
 var mongoose = require('mongoose');
 var pollDB = require('./public/javascript/pollDAO');
 var userDB = require('./public/javascript/userDAO');
-var passport = require('passport');
-var GitHubStrategy = require('passport-github').Strategy;
-var $ = require('jquery');
 
 var app = express();
 
-// setting up passport
-passport.serializeUser(function(user, done) {
-   done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-   done(null, user);
-});
-
-// github strategy
-var GIT_HUB_CLIENT_ID = "2d21240ababc64035ede"
-var GIT_HUB_CLIENT_SECRET = "ba8de45333f38d8c989b2ad2521bb45527177266"
-passport.use(new GitHubStrategy({
-    clientID: GIT_HUB_CLIENT_ID,
-    clientSecret: GIT_HUB_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/github/callback"
-    },
-    function(accessToken, refreshToken, profile, done) {
-        $.get(profile._json.organizations_url, function(data) {
-            if (isFromHackerspace(data)){
-                return done(null, profile);
-            }
-            else return done(null, null);
-        });
-    }
-));
-
-var organizationName = 'HackerSpaceMaringa';
-function isFromHackerspace(organizations){
-    for (var i = 0; i < organizations.length; i++){
-        if (organizations[i].login == organizationName)
-            return true;
-    }
-    return false;
-}
 
 // all environments
 app.set('port', process.env.PORT || 3000);
