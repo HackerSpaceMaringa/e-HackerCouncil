@@ -22,14 +22,15 @@ exports.userDAO = function(mongoose) {
 
   // Execute callback if user don't exist
   this.dontExist = function(userData, callback){
-    user.find({email: userData.email},function (err, userRes){
-      if (err)   return
-      if (userRes) return
-      callback(userData)
+    user.findOne({email: userData.email}, function(err, userRes) {
+      console.log(userRes);
+      if (err) return
+      if (userRes != null) return
+      callback(userData);
     });
   }
 
-  // Remove a poll with the same ID; 
+  // Remove a poll with the same ID;
   this.remove = function(a) {
     user.remove(a, function(err, result) {
       if (err) return console.error(err);
