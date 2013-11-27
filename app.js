@@ -1,8 +1,8 @@
 
-/* 
+/*
  * Copyright (c) 2013 HackerSpace Maringá
  * This software is under The MIT License.
- * 
+ *
  * Developers:
  *  João Almeida de Jesus Jr.   <joao29a@gmail.com>
  *  Marcos Yukio Siraichi       <sir.yukio@gmail.com>
@@ -22,6 +22,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var pollDB = require('./public/javascript/pollDAO');
 var userDB = require('./public/javascript/userDAO');
+var count = require('./public/javascript/countDown');
 
 var app = express();
 
@@ -88,3 +89,7 @@ function ensureAuthenticated(req, res, next) {
    if (req.isAuthenticated()) { return next(); }
    res.redirect('/');
 }
+
+/*
+ * count.doEveryMidNight(function_callback)
+ */
