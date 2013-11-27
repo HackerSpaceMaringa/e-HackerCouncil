@@ -11,6 +11,8 @@
     "stylus": "*",
     "mongoose": "*",
     "passport": "*",
-    "passport-google": "*"
+    "passport-google": "*",
+    "passport-github": "*",
+    "jquery": "*"
   }
 }
