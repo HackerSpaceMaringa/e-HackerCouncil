@@ -6,7 +6,8 @@ exports.add = function(req, res) {
   var poll = {
     title: req.body.title,
     author: req.user.emails[0].value,
-    description: req.body.description
+    description: req.body.description,
+    situation: 0
   };
   pollDAO.insert(poll); // <<-- Come from global scope.
   res.redirect('polls');

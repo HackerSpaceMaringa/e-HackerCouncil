@@ -6,6 +6,7 @@ exports.pollDAO = function(mongoose) {
   var pollSchema = new mongoose.Schema({
     title: String,
     author: String,
+    situation: Number,
     comments: [{ body: String, author: String, date: Date }],
     description: String,
     date: { type: Date, default: Date.now },
@@ -45,6 +46,17 @@ exports.pollDAO = function(mongoose) {
       if (err) return console.error(err);
       console.dir(a);
       console.dir(comment);
+    });
+  }
+
+  // Update the situation of a poll
+  this.situation = function(a,newSituation) {
+    update = { $push: {situation:newSituation}},
+    options = { upsert: true};
+    poll.update(a, update, options, function(err, num){
+        if (err) return console.error(err);
+        console.dir(a);
+        console.dir(newSituation);
     });
   }
 

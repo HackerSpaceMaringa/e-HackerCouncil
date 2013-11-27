@@ -90,6 +90,16 @@ function ensureAuthenticated(req, res, next) {
    res.redirect('/');
 }
 
-/*
- * count.doEveryMidNight(function_callback)
- */
+count.doEveryMidNight(function pollExceeded() {
+    pollDAO.list(10, function callback(polls) {
+        var maxTime = 7*24*3600; //one week in seconds
+        actualDate = new Date().getTime() / 1000;
+        for (var i = 0; i < polls.length; i++){
+            pollDate = polls[i].date.getTime() / 1000;
+            totalTime = actualDate - pollDate;
+            if (totalTime > maxTime){
+                pollDAO.situation(polls[i], 1);
+            }
+        }
+    });
+});
