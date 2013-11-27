@@ -6,7 +6,7 @@ exports.pollDAO = function(mongoose) {
   var pollSchema = new mongoose.Schema({
     title: String,
     author: String,
-    comments: [{ body: String, date: Date }],
+    comments: [{ body: String, author: String, date: Date }],
     description: String,
     date: { type: Date, default: Date.now },
     votes: {
