@@ -14,6 +14,8 @@ var pollDB = require('./public/javascript/pollDAO');
 var userDB = require('./public/javascript/userDAO');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google').Strategy;
+var GitHubStrategy = require('passport-github').Strategy;
+var $ = require('jquery');
 
 var app = express();
 
@@ -38,6 +40,33 @@ passport.use(new GoogleStrategy({
       });
    }
 ));
+
+// github strategy
+var GIT_HUB_CLIENT_ID = "2d21240ababc64035ede"
+var GIT_HUB_CLIENT_SECRET = "ba8de45333f38d8c989b2ad2521bb45527177266"
+passport.use(new GitHubStrategy({
+    clientID: GIT_HUB_CLIENT_ID,
+    clientSecret: GIT_HUB_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/github/callback"
+    },
+    function(accessToken, refreshToken, profile, done) {
+        $.get(profile._json.organizations_url, function(data) {
+            if (isFromHackerspace(data)){
+                return done(null, profile);
+            }
+            else return done(null, null);
+        });
+    }
+));
+
+var organizationName = 'HackerSpaceMaringa';
+function isFromHackerspace(organizations){
+    for (var i = 0; i < organizations.length; i++){
+        if (organizations[i].login == organizationName)
+            return true;
+    }
+    return false;
+}
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -83,14 +112,21 @@ app.get('/poll/comment/:id/', ensureAuthenticated, poll.comment);
 app.get('/poll/remove/:id', ensureAuthenticated, poll.remove);
 app.get('/polls', ensureAuthenticated, poll.list);
 
-// login
+// login google
 app.get('/auth/google',
       passport.authenticate('google', { failureRedirect: '/' }));
 app.get('/auth/google/return',
       passport.authenticate('google', { failureRedirect: '/' }),
       login.logged);
-app.get('/logout', login.logout);
 
+// login github
+app.get('/auth/github',
+        passport.authenticate('github', { failureRedirect: '/'}));
+app.get('/auth/github/callback',
+        passport.authenticate('github', { failureRedirect: '/'}),
+        login.logged);
+
+app.get('/logout', login.logout);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
