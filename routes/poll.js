@@ -5,6 +5,7 @@
 exports.add = function(req, res) {
   var poll = {
     title: req.body.title,
+    author: req.user.emails[0].value,
     description: req.body.description
   };
   pollDAO.insert(poll); // <<-- Come from global scope.
@@ -29,6 +30,7 @@ exports.comment = function(req,res) {
   };
   var comment = {
     body: req.param('commentBody'),
+    author: req.user.emails[0].value,
     date: Date.now()
   }
   pollDAO.comment(poll,comment);
