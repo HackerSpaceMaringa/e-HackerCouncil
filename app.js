@@ -20,7 +20,6 @@ var mongoose = require('mongoose');
 var pollDB = require('./public/javascript/pollDAO');
 var userDB = require('./public/javascript/userDAO');
 var passport = require('passport');
-var GoogleStrategy = require('passport-google').Strategy;
 var GitHubStrategy = require('passport-github').Strategy;
 var $ = require('jquery');
 
@@ -34,19 +33,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
    done(null, user);
 });
-
-// google strategy
-passport.use(new GoogleStrategy({
-      returnURL: 'http://localhost:3000/auth/google/return',
-      realm: 'http://localhost:3000/'
-   },
-   function(identifier, profile, done) {
-      process.nextTick(function() {
-         profile.identifier = identifier;
-         return done(null, profile);
-      });
-   }
-));
 
 // github strategy
 var GIT_HUB_CLIENT_ID = "2d21240ababc64035ede"
@@ -118,13 +104,6 @@ app.post('/poll/add', ensureAuthenticated, poll.add);
 app.get('/poll/comment/:id/', ensureAuthenticated, poll.comment);
 app.get('/poll/remove/:id', ensureAuthenticated, poll.remove);
 app.get('/polls', ensureAuthenticated, poll.list);
-
-// login google
-app.get('/auth/google',
-      passport.authenticate('google', { failureRedirect: '/' }));
-app.get('/auth/google/return',
-      passport.authenticate('google', { failureRedirect: '/' }),
-      login.logged);
 
 // login github
 app.get('/auth/github',
