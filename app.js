@@ -73,18 +73,16 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.post('/poll/add', poll.add);
-app.get('/poll/comment/:id/', poll.comment);
-app.get('/poll/remove/:id', poll.remove);
-app.get('/polls', poll.list);
+app.post('/poll/add', ensureAuthenticated, poll.add);
+app.get('/poll/comment/:id/', ensureAuthenticated, poll.comment);
+app.get('/poll/remove/:id', ensureAuthenticated, poll.remove);
+app.get('/polls', ensureAuthenticated, poll.list);
 
 // login
-app.get('/login', login.login);
-app.post('/auth/google',
-      passport.authenticate('google', { failureRedirect: '/login' }),
-      login.logged);
+app.get('/auth/google',
+      passport.authenticate('google', { failureRedirect: '/' }));
 app.get('/auth/google/return',
-      passport.authenticate('google', { failureRedirect: '/login' }),
+      passport.authenticate('google', { failureRedirect: '/' }),
       login.logged);
 app.get('/logout', login.logout);
 
@@ -96,5 +94,5 @@ http.createServer(app).listen(app.get('port'), function(){
 // always connected
 function ensureAuthenticated(req, res, next) {
    if (req.isAuthenticated()) { return next(); }
-   res.redirect('login');
+   res.redirect('/');
 }

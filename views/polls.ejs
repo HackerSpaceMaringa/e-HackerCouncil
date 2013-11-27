@@ -5,7 +5,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-
+     Olá, <%= user.displayName %>. <a href='/logout'>Sair</a>
      <h1>Adicione uma petição ao HackerCouncil</h1>
      <form action="/poll/add" method="post">
         <input type="text" name="title"/><br>
@@ -22,12 +22,12 @@
         <a href='/poll/remove/<%= polls[i].id %>'>Remover</a>
         <h2>Comentários:</h2>
         <% for(var j=0; j<polls[i].comments.length; j++){ %>
-          <p> <%= polls[i].comments[j].body %></p> 
+          <p> <%= polls[i].comments[j].body %></p>
         <% } %>
         <form action='/poll/comment/<%= polls[i].id %>/' method="get">
-          <textarea name="commentBody"></textarea><br>                            
-          <input type="submit" value="comentar">                                     
-        </form>  
+          <textarea name="commentBody"></textarea><br>
+          <input type="submit" value="comentar">
+        </form>
         </li>
       <% } %>
   </body>

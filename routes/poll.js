@@ -12,15 +12,15 @@ exports.add = function(req, res) {
 }
 
 exports.remove = function(req, res) {
-  var poll = {                                                                  
+  var poll = {
     _id: req.param('id')
-  }; 
+  };
   pollDAO.remove(poll);
   res.redirect('polls');
 }
 
 exports.vote = function(req,res) {
-  
+
 }
 
 exports.comment = function(req,res) {
@@ -37,6 +37,6 @@ exports.comment = function(req,res) {
 
 exports.list = function(req, res) {
   pollDAO.list(10,function(polls) {
-    res.render('polls', {polls: polls});
-  }); 
+    res.render('polls', {polls: polls, user: req.user});
+  });
 }
