@@ -49,7 +49,6 @@ passport.use(new GitHubStrategy({
     callbackURL: "http://localhost:3000/auth/github/callback"
     },
     function(accessToken, refreshToken, profile, done) {
-        var organizations = null;
         $.get(profile._json.organizations_url, function(data) {
             if (isFromHackerspace(data)){
                 return done(null, profile);
