@@ -22,7 +22,15 @@ exports.remove = function(req, res) {
 }
 
 exports.vote = function(req,res) {
-
+  var vote = {
+    email: req.user.emails[0].value,
+    vote: req.param('vote')
+  }
+  var poll = {
+    _id: req.param('id')
+  }
+  pollDAO.vote(poll,vote)
+  res.redirect('polls');
 }
 
 exports.comment = function(req,res) {

@@ -69,7 +69,9 @@ app.get('/', routes.index);
 app.post('/poll/add', ensureAuthenticated, poll.add);
 app.get('/poll/comment/:id/', ensureAuthenticated, poll.comment);
 app.get('/poll/remove/:id', ensureAuthenticated, poll.remove);
+app.get('/poll/vote/:id/:vote', ensureAuthenticated, poll.vote);
 app.get('/polls', ensureAuthenticated, poll.list);
+
 
 // login github
 app.get('/auth/github',

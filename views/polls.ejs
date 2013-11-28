@@ -7,6 +7,7 @@
   <body>
      Olá, <%= user.displayName %>. <a href='/logout'>Sair</a>
      <h1>Adicione uma petição ao HackerCouncil</h1>
+     
      <form action="/poll/add" method="post">
         <input type="text" name="title"/><br>
         <textarea name="description"></textarea><br>
@@ -15,11 +16,34 @@
 
       <h1>HackerCouncil - Lista</h1>
       <% for(var i=0; i<polls.length; i++) { %>
-        <li>
+        
+      <li>
         <h2> <%= polls[i].title %> by <%= polls[i].author %></h2>
         <p>  <%= polls[i].description %></p>
         <%= polls[i].date %><br>
+        
+        <h2>Votos:</h2>
+        <% a = 0
+           c = 0
+           n = 0
+           for(var j=0;j<polls[i].votes.length;j++){
+             var vote = polls[i].votes[j].vote;
+             if (vote == 0) c++
+             else if (vote == 1) a++
+             else n++
+           }
+        %>
+        <p>A favor: <%= a %></p>
+        <p>Contra:  <%= c %></p>
+        <p>Neutro:  <%= n %></p>
+
+        <h2>Votar: </h2>
+        <a href='/poll/vote/<%= polls[i].id %>/1'>A favor</a>
+        <a href='/poll/vote/<%= polls[i].id %>/0'>Contra</a>
+        <a href='/poll/vote/<%= polls[i].id %>/2'>Abster</a>
+        <br>
         <a href='/poll/remove/<%= polls[i].id %>'>Remover</a>
+      
         <h2>Comentários:</h2>
         <% for(var j=0; j<polls[i].comments.length; j++){ %>
         <p> <%= polls[i].comments[j].body %> by 
@@ -29,7 +53,8 @@
           <textarea name="commentBody"></textarea><br>
           <input type="submit" value="comentar">
         </form>
-        </li>
+        
+      </li>
       <% } %>
   </body>
 </html>

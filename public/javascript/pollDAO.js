@@ -10,11 +10,9 @@ exports.pollDAO = function(mongoose) {
     comments: [{ body: String, author: String, date: Date }],
     description: String,
     date: { type: Date, default: Date.now },
-    votes: {
-          aprove: Number,
-          reprove: Number,
-          neutral: Number
-    }
+    votes: [{ email: String, vote: Number }] // 0 - Negative
+                                             // 1 - positive
+                                             // 2 - Neutral
   });
 
   var poll = mongoose.model('poll', pollSchema);
@@ -40,12 +38,37 @@ exports.pollDAO = function(mongoose) {
   // Push a comment in the poll that fits with a.
   this.comment = function(a,comment) {
     var conditions = a, 
-    update = { $push: {comments:comment}},
-    options = { upsert: true };
+        update = { $push: {comments:comment}},
+        options = { upsert: true };
     poll.update(conditions, update, options, function(err, num) {
-      if (err) return console.error(err);
+      if (err) return 
       console.dir(a);
       console.dir(comment);
+    });
+  }
+
+  // Just push the vote in the poll
+  function updateVote(conditions, update, options){
+    poll.update(conditions, update, options, function(err,num) {
+      if (err) return 
+      console.dir(update)
+    }); 
+  }
+
+  // Push a new vote to poll
+  this.vote = function(a,newVote){
+    var conditions = a,
+        update = { $push: {votes: newVote}},
+        options = { upsert: true };
+    
+    // Check if has already voted
+    poll.findOne(a, function(err, pollRes) {
+      for( var i = 0; i < pollRes.votes.length; i++ ) {
+        if ( pollRes.votes[i].email == newVote.email ) {
+          return
+        } 
+      }
+      updateVote(conditions, update, options)
     });
   }
 
