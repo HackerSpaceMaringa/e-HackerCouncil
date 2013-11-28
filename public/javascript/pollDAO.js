@@ -51,7 +51,7 @@ exports.pollDAO = function(mongoose) {
 
   // Update the situation of a poll
   this.situation = function(a,newSituation) {
-    update = { $push: {situation:newSituation}},
+    update = { $set: {situation:newSituation}},
     options = { upsert: true};
     poll.update(a, update, options, function(err, num){
         if (err) return console.error(err);
