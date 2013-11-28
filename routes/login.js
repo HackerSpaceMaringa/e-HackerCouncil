@@ -20,12 +20,7 @@ passport.use(new GitHubStrategy({
     callbackURL: "http://localhost:3000/auth/github/callback"
     },
     function(accessToken, refreshToken, profile, done) {
-        $.get(profile._json.organizations_url, function(data) {
-            if (isFromHackerspace(data)){
-                return done(null, profile);
-            }
-            else return done(null, null);
-        });
+        return done(null, profile);
     }
 ));
 
@@ -39,13 +34,20 @@ function isFromHackerspace(organizations){
 }
 
 exports.logged = function(req, res) {
-   var user = {
-      name: req.user.displayName,
-      email: req.user.emails[0].value,
-      level: 0
-   };
-   userDAO.dontExist(user,userDAO.insert);
-   res.redirect('/polls');
+    $.get(req.user._json.organizations_url, function(data) {
+        var memberLevel = 0;
+        if (isFromHackerspace(data)){
+            memberLevel = 1
+        }
+        var user = {
+           name: req.user.displayName,
+           username: req.user.username,
+           email: req.user.emails[0].value,
+           level: memberLevel
+        };
+        userDAO.dontExist(user,userDAO.insert);
+        res.redirect('/polls');
+    });
 }
 
 exports.logout = function(req, res) {
