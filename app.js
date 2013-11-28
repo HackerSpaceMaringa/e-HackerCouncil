@@ -92,8 +92,8 @@ function ensureAuthenticated(req, res, next) {
    res.redirect('/');
 }
 
-count.doEveryMidNight(function pollExceeded() {
-    pollDAO.list(10, function callback(polls) {
+count.doEveryMidNight(function() {
+    pollDAO.list(10, function(polls) {
         var maxTime = 7*24*3600; //one week in seconds
         actualDate = new Date().getTime() / 1000;
         for (var i = 0; i < polls.length; i++){
