@@ -38,4 +38,12 @@ exports.userDAO = function(mongoose) {
       console.dir(result);
     });
   }
+
+  // List all users
+  this.list = function(callback) {
+     user.find(function(err, users) {
+        if (err) return console.log(err);
+        callback(users);
+     });
+  }
 }

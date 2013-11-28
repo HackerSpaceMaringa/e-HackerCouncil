@@ -14,6 +14,7 @@ var express = require('express');
 passport = require('passport');
 GitHubStrategy = require('passport-github').Strategy;
 $ = require('jquery');
+email = require('nodemailer');
 var routes = require('./routes');
 var poll = require('./routes/poll');
 var login = require('./routes/login');
@@ -23,6 +24,7 @@ var mongoose = require('mongoose');
 var pollDB = require('./public/javascript/pollDAO');
 var userDB = require('./public/javascript/userDAO');
 var count = require('./public/javascript/countDown');
+var sendEmail = require('./public/javascript/mail');
 
 var app = express();
 
@@ -93,6 +95,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 count.doEveryMidNight(function pollExceeded() {
+   console.log('Start verifying');
     pollDAO.list(10, function callback(polls) {
         var maxTime = 7*24*3600; //one week in seconds
         actualDate = new Date().getTime() / 1000;
@@ -100,6 +103,8 @@ count.doEveryMidNight(function pollExceeded() {
             pollDate = polls[i].date.getTime() / 1000;
             totalTime = actualDate - pollDate;
             if (totalTime > maxTime){
+               console.log('Sending to all');
+               sendEmail.sendToUsers(polls[i]);
                 pollDAO.situation(polls[i], 1);
             }
         }

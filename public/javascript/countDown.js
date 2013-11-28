@@ -19,6 +19,7 @@ var isMidNight = function() {
          data.getSeconds() == 0) {
 
             clearInterval(setUpInt);
+            callFunc();
             setInterval(function() { callFunc(); }, oneDay);
          }
 }
