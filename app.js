@@ -33,7 +33,7 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.favicon());
+app.use(express.favicon('./public/images/hackfavicon.ico'));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.bodyParser());
@@ -74,7 +74,6 @@ app.get('/poll/remove/:id', ensureAuthenticated, poll.remove);
 app.get('/poll/vote/:id/:vote', ensureAuthenticated, poll.vote);
 app.get('/polls', ensureAuthenticated, poll.list);
 
-
 // login github
 app.get('/auth/github',
         passport.authenticate('github', { failureRedirect: '/'}));
@@ -94,9 +93,8 @@ function ensureAuthenticated(req, res, next) {
    res.redirect('/');
 }
 
-count.doEveryMidNight(function pollExceeded() {
-   console.log('Start verifying');
-    pollDAO.list(10, function callback(polls) {
+count.doEveryMidNight(function() {
+    pollDAO.list(10, function(polls) {
         var maxTime = 7*24*3600; //one week in seconds
         actualDate = new Date().getTime() / 1000;
         for (var i = 0; i < polls.length; i++){

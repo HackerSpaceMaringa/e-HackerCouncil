@@ -5,6 +5,7 @@
 exports.userDAO = function(mongoose) {
   var userSchema = new mongoose.Schema({
     name: String,
+    username: String,
     email: String,
     level: Number,
   });
@@ -22,9 +23,7 @@ exports.userDAO = function(mongoose) {
 
   // Execute callback if user don't exist
   this.dontExist = function(userData, callback){
-    user.findOne({email: userData.email}, function(err, userRes) {
-      console.log(userRes);
-      if (err) return
+    this.search(userData, function(userRes){
       if (userRes != null) return
       callback(userData);
     });
@@ -45,5 +44,20 @@ exports.userDAO = function(mongoose) {
         if (err) return console.log(err);
         callback(users);
      });
+  }
+
+  // Find one instance of userData by his/her username
+  this.search = function(userData, callback){
+    user.findOne({username: userData.username}, function(err, userRes) {
+      if (err) console.error(err);
+      callback(userRes);
+    });
+  }
+
+  // Check if user is a hackerspace member
+  this.isMember = function(user, callback){
+    this.search(user, function(userRes){
+      if (userRes.level == 1) callback();
+    });
   }
 }

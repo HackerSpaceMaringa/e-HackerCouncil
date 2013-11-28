@@ -10,7 +10,7 @@ exports.pollDAO = function(mongoose) {
     comments: [{ body: String, author: String, date: Date }],
     description: String,
     date: { type: Date, default: Date.now },
-    votes: [{ email: String, vote: Number }] // 0 - Negative
+    votes: [{ username: String, vote: Number }] // 0 - Negative
                                              // 1 - positive
                                              // 2 - Neutral
   });
@@ -64,7 +64,7 @@ exports.pollDAO = function(mongoose) {
     // Check if has already voted
     poll.findOne(a, function(err, pollRes) {
       for( var i = 0; i < pollRes.votes.length; i++ ) {
-        if ( pollRes.votes[i].email == newVote.email ) {
+        if ( pollRes.votes[i].username == newVote.username ) {
           return
         } 
       }
