@@ -11,8 +11,8 @@
     "stylus": "*",
     "mongoose": "*",
     "passport": "*",
-    "passport-google": "*",
     "passport-github": "*",
-    "jquery": "*"
+    "jquery": "*",
+    "nodemailer": "*"
   }
 }
