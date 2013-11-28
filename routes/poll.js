@@ -40,7 +40,7 @@ exports.vote = function(req,res) {
 }
 
 exports.comment = function(req,res) {
-  userDao.isMember(req.user, function(){
+  userDAO.isMember(req.user, function(){
       var poll = {
         _id: req.param('id')
       };
