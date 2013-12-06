@@ -64,9 +64,10 @@ exports.pollDAO = function(mongoose) {
     // Check if has already voted
     poll.findOne(a, function(err, pollRes) {
       for( var i = 0; i < pollRes.votes.length; i++ ) {
-        if ( pollRes.votes[i].username == newVote.username ) {
+        if ( pollRes.votes[i].vote == newVote.vote ) {
           return
-        } 
+        }
+        update = { $set: {votes: newVote}};
       }
       updateVote(conditions, update, options)
     });
