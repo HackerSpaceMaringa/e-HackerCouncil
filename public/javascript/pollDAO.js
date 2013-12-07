@@ -58,17 +58,25 @@ exports.pollDAO = function(mongoose) {
   // Push a new vote to poll
   this.vote = function(a,newVote){
     var conditions = a,
-        update = { $push: {votes: newVote}},
         options = { upsert: true };
     
     // Check if has already voted
     poll.findOne(a, function(err, pollRes) {
       for( var i = 0; i < pollRes.votes.length; i++ ) {
-        if ( pollRes.votes[i].vote == newVote.vote ) {
+        if ( pollRes.votes[i].username == newVote.username && 
+                pollRes.votes[i].vote == newVote.vote ) {
           return
         }
-        update = { $set: {votes: newVote}};
+        else if (pollRes.votes[i].username == newVote.username){
+            var last = pollRes.votes.length - 1;
+            var temp = pollRes.votes[last];
+            pollRes.votes[last] = pollRes.votes[i];
+            pollRes.votes[i] = temp;
+            update = { $pop: {votes: last}}; //index to remove
+            updateVote(conditions, update, options);
+        }
       }
+      update = { $push: {votes: newVote}},
       updateVote(conditions, update, options)
     });
   }
