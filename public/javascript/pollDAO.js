@@ -68,12 +68,8 @@ exports.pollDAO = function(mongoose) {
           return
         }
         else if (pollRes.votes[i].username == newVote.username){
-            var last = pollRes.votes.length - 1;
-            var temp = pollRes.votes[last];
-            pollRes.votes[last] = pollRes.votes[i];
-            pollRes.votes[i] = temp;
-            update = { $pop: {votes: last}}; //index to remove
-            updateVote(conditions, update, options);
+            update = { $pull: {votes: pollRes.votes[i]}};
+            updateVote(conditions, update, options)
         }
       }
       update = { $push: {votes: newVote}},
